@@ -66,7 +66,7 @@
 		var object_id = $('#object_id').val();
 		var access_token = $('#access_token').val();
 
-		jQuery.post("/home/research_object", {
+		jQuery.post("<%= home_research_object_path %>", {
 			object_id : object_id,
 			access_token : access_token
 		}, function(data) {
@@ -81,7 +81,7 @@
 		var result_limit = $('#result_limit').val();
 		var object_id = $('#object_id').val();
 
-		jQuery.post("/home/refresh_object", {
+		jQuery.post("<%= home_refresh_object_path %>", {
 			connection_type : connection_type,
 			result_limit : result_limit,
 			object_id : object_id
