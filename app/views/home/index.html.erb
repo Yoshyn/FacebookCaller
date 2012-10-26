@@ -1,0 +1,93 @@
+<%= content_for :active_home, "class=active" %>
+<div class="page-header">
+	<h1>Facebook API - Search data</h1>
+</div>
+
+<% if notice %>
+<div id="notice" class="alert alert-info">
+	<button type="button" class="close" data-dismiss="alert">
+		×
+	</button>
+	<%= notice %>
+</div>
+<% end %>
+
+<div class="row">
+	<div class="center">
+		<div class="span12">
+			<div class="well">
+				<%= form_tag :controller => 'home', :action => 'change_token' do %>
+				<%= label_tag(:access_token, "Enter an FB Access Token") %>
+				<%= text_field_tag(:access_token) %>
+				<%= submit_tag "Change Token", :class => 'btn btn-primary' %>
+				<% end %>
+				<% unless @token.blank? %>
+				<p>
+					Your current access token : <%= @token %>
+				</p>
+				<% end %>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="well fixed_height" style="min-height: 240px;"²>
+				<h3> Select Object ID : </h3>
+				<%= label_tag(:object_id, "Enter an FB Object ID") %>
+				<%= text_field_tag(:object_id, @default_object_id) %>
+				<%= link_to "Search object" , '', :class => 'btn btn-primary', :id => 'fb_research' %>
+				<hr />
+				Examples: me or barackobama
+			</div>
+		</div>
+		<div class="span6">
+			<div class="well fixed" style="min-height: 240px;">
+				<div id="option_data">
+					<%= render :partial => 'options_data' %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<div class="well">
+			<div id="data" >
+				<%= render :partial => 'data' %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#fb_research").live('click', fb_research);
+	$("#fb_refresh").live('click', fb_refresh);
+
+	function fb_research() {
+		var object_id = $('#object_id').val();
+		var access_token = $('#access_token').val();
+
+		jQuery.post("/home/research_object", {
+			object_id : object_id,
+			access_token : access_token
+		}, function(data) {
+			$("#option_data").html(data);
+		});
+		fb_refresh();
+		return false;
+	}
+
+	function fb_refresh() {
+		var connection_type = $('#connection_type').val();
+		var result_limit = $('#result_limit').val();
+		var object_id = $('#object_id').val();
+
+		jQuery.post("/home/refresh_object", {
+			connection_type : connection_type,
+			result_limit : result_limit,
+			object_id : object_id
+		}, function(data) {
+			$("#data").html(data);
+		});
+		return false;
+	}
+</script>

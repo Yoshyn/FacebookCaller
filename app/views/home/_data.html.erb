@@ -1,0 +1,16 @@
+<h3> Data :</h3>
+<% require 'awesome_print' %>
+<% if @data %>
+	<% if @error %>
+	<div id="error_explanation">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<%= @data %>
+	</div>
+	<% else %>
+		<table class="table">
+		<% @data.each do |key, value| %>
+		<%= raw(hash_to_html(key, value)) %>
+		<% end %>
+		</table>
+	<% end %>
+<% end %>
